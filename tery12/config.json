@@ -1,4 +1,7 @@
 {
-  "name":"tery12",
-  "isStorageConfigured" : false
+  "project":"tery12",
+  "isStorageConfigured" : false,
+  "username" : "ErrorxCode",
+  "version" : "3.0",
+  "storageBucketName" : "storage" 
 }
