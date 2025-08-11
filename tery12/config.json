@@ -1,6 +1,6 @@
 {
   "project":"tery12",
-  "isStorageConfigured" : false,
+  "isStorageConfigured" : true,
   "username" : "ErrorxCode",
   "version" : "3.0",
   "storageBucketName" : "storage" 
