@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Aarohi 🌸</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+            touch-action: manipulation;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 24px;
+            color: rgba(236, 72, 153, 0.4);
+            animation: floatup 6s linear infinite;
+            z-index: 0;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        @keyframes floatup {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        .card-pop {
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        .pulse-emoji {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="h-screen w-screen flex items-center justify-center relative">
+
+    <!-- Decorative Background Hearts & Sparkles -->
+    <div id="heart-container" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+
+    <!-- Main Content Card -->
+    <div id="main-card" class="card-pop relative z-10 bg-white/90 backdrop-blur-sm p-8 rounded-3xl shadow-2xl shadow-pink-200 w-11/12 max-w-sm text-center border-4 border-pink-100">
+        
+        <!-- Image/Emoji Display -->
+        <div id="emoji-display" class="text-6xl mb-6 pulse-emoji cursor-default">
+            👋
+        </div>
+
+        <!-- Text Display -->
+        <div class="min-h-[100px] flex items-center justify-center mb-8">
+            <h1 id="text-display" class="text-xl font-bold text-pink-600 transition-all duration-300">
+                Hii Aarohi! ✨
+            </h1>
+        </div>
+
+        <!-- Controls -->
+        <div id="controls" class="flex flex-col gap-4 relative min-h-[60px]">
+            <button id="next-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg shadow-pink-300 transition-transform transform hover:scale-105 active:scale-95 text-lg w-full">
+                Next 🌸
+            </button>
+            
+            <!-- Final Decision Buttons (Hidden initially) -->
+            <div id="decision-buttons" class="hidden flex-row gap-4 justify-center w-full">
+                <button id="yes-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-full shadow-lg shadow-pink-300 transition-all transform hover:scale-105 active:scale-95 text-base flex-1 z-20 relative">
+                    Let's talk! 🥳
+                </button>
+                <button id="no-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-3 px-4 rounded-full transition-all text-sm flex-1 absolute right-0 z-10 whitespace-nowrap">
+                    Ignore him 🙅‍♀️
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Story Sequence tailored for Aarohi
+        const story = [
+            { text: "Hii Aarohi! ✨", emoji: "👋" },
+            { text: "First of all... HUGE congratulations on finally being done with your NEET exam!! 🎉🩺", emoji: "👩‍⚕️" },
+            { text: "I know how hard you worked, so I purposely waited until May 4th to text you. Didn't want to distract you! 😇", emoji: "🕰️" },
+            { text: "Also, about my sudden disappearing act earlier... 👻", emoji: "🫣" },
+            { text: "My Instagram literally got BANNED right in the middle of our conversation! 😭 RIP my account.", emoji: "📱" },
+            { text: "But I'm back now! Ready to catch up and celebrate you crushing that exam? 🌸\n\n— Rahil", emoji: "💖", isFinal: true }
+        ];
+
+        let currentStep = 0;
+        
+        // DOM Elements
+        const textDisplay = document.getElementById('text-display');
+        const emojiDisplay = document.getElementById('emoji-display');
+        const nextBtn = document.getElementById('next-btn');
+        const decisionButtons = document.getElementById('decision-buttons');
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
+        const mainCard = document.getElementById('main-card');
+
+        // Create Background Elements
+        function createHearts() {
+            const container = document.getElementById('heart-container');
+            const emojis = ['💖', '💕', '🌸', '✨', '🎉'];
+            for(let i=0; i<18; i++) {
+                let heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                heart.style.animationDelay = (Math.random() * 5) + 's';
+                heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+
+        // Update Screen Logic
+        function updateScreen() {
+            if (currentStep < story.length) {
+                // Animate out
+                textDisplay.classList.add('opacity-0', '-translate-y-2');
+                emojiDisplay.classList.remove('pulse-emoji');
+                emojiDisplay.classList.add('scale-50', 'opacity-0');
+                
+                setTimeout(() => {
+                    // Update content
+                    textDisplay.innerText = story[currentStep].text;
+                    emojiDisplay.innerText = story[currentStep].emoji;
+                    
+                    // Animate in
+                    textDisplay.classList.remove('opacity-0', '-translate-y-2');
+                    emojiDisplay.classList.remove('scale-50', 'opacity-0');
+                    emojiDisplay.classList.add('pulse-emoji');
+                    
+                    if (story[currentStep].isFinal) {
+                        nextBtn.classList.add('hidden');
+                        decisionButtons.classList.remove('hidden');
+                        decisionButtons.classList.add('flex');
+                    }
+                }, 300);
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentStep++;
+            updateScreen();
+        });
+
+        // The playful moving button logic
+        function moveNoButton() {
+            const cardRect = mainCard.getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            const maxX = cardRect.width - btnRect.width - 40;
+            const maxY = cardRect.height - btnRect.height - 40;
+            
+            const randomX = Math.floor(Math.random() * maxX) - (maxX / 2) + 20;
+            const randomY = Math.floor(Math.random() * maxY) - (maxY / 2) + 20;
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.transform = `translate(${randomX}px, ${randomY - 60}px) rotate(${Math.random() * 20 - 10}deg)`;
+            
+            // Make the Let's talk button slightly bigger to encourage her!
+            const currentScale = parseFloat(yesBtn.style.transform.replace('scale(', '').replace(')', '') || 1);
+            if(currentScale < 1.15) {
+                yesBtn.style.transform = `scale(${currentScale + 0.05})`;
+            }
+        }
+
+        noBtn.addEventListener('mouseover', moveNoButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        // Success State
+        yesBtn.addEventListener('click', () => {
+            textDisplay.innerText = "YAY! Can't wait! Texting you right now... 🥰";
+            emojiDisplay.innerText = "🎉";
+            decisionButtons.classList.add('hidden');
+            
+            // Confetti Celebration
+            var duration = 4 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+
+              if (timeLeft <= 0) {
+                return clearInterval(interval);
+              }
+
+              var particleCount = 50 * (timeLeft / duration);
+              confetti(Object.assign({}, defaults, { particleCount,
+                origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                colors: ['#fbcfe8', '#f472b6', '#db2777', '#fbbf24']
+              }));
+              confetti(Object.assign({}, defaults, { particleCount,
+                origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                colors: ['#fbcfe8', '#f472b6', '#db2777', '#fbbf24']
+              }));
+            }, 250);
+        });
+    </script>
+</body>
+</html>
